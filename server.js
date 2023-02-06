@@ -41,15 +41,25 @@ async function handleEvent(event) {
     // ignore non-text-message event
     return Promise.resolve(null);
   }
-
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: event.message.text ,
-    max_tokens: 500,
-  });
-
-  // create a echoing text message
-  const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
+  var echo;
+  try {
+    var maxTokens = 300;
+    var receiveMsg = event.message.text || '';
+    var matchedTokenPattern = receiveMsg.match(/^#(\d+)字\n/);
+    if (matchedTokenPattern != null) {
+      maxTokens = matchedTokenPattern[1];
+      receiveMsg = receiveMsg.match(/^#(\d+)字\n/).trim();
+    }
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: event.message.text,
+      max_tokens: maxTokens,
+    });
+    // create a echoing text message
+    echo = { type: 'text', text: completion.data.choices[0].text.trim() };
+  } catch (e) {
+    echo = { type: 'text', text: '你問得太難，唔識答( ´•̥̥̥ω•̥̥̥` )' };
+  }
 
   // use reply API
   return client.replyMessage(event.replyToken, echo);

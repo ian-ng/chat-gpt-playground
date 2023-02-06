@@ -47,7 +47,7 @@ async function handleEvent(event) {
     var receiveMsg = event.message.text || '';
     var matchedTokenPattern = receiveMsg.match(/^#(\d+)字\n/);
     if (matchedTokenPattern != null) {
-      maxTokens = matchedTokenPattern[1];
+      maxTokens = matchedTokenPattern[1] * 1;
       receiveMsg = receiveMsg.match(/^#(\d+)字\n/).trim();
     }
     const completion = await openai.createCompletion({

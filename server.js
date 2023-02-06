@@ -48,7 +48,7 @@ async function handleEvent(event) {
     var matchedTokenPattern = receiveMsg.match(/^#(\d+)字\n/);
     if (matchedTokenPattern != null) {
       maxTokens = matchedTokenPattern[1] * 1;
-      receiveMsg = receiveMsg.match(/^#(\d+)字\n/).trim();
+      receiveMsg = receiveMsg.replace(/^#(\d+)字\n/,'').trim();
     }
     const completion = await openai.createCompletion({
       model: "text-davinci-003",

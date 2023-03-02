@@ -51,7 +51,7 @@ async function handleEvent(event) {
       receiveMsg = receiveMsg.replace(/^#(\d+)字\n/,'').trim();
     }
     const completion = await openai.createCompletion({
-      model: "gpt-3.5-turbo", // "text-davinci-003",
+      model: "text-davinci-003",
       prompt: event.message.text,
       max_tokens: maxTokens,
     });
